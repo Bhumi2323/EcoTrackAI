@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+```
+<title>EcoTrackAI - E-Waste Auditor</title>
+
+<style>
+
+    body {
+        font-family: Arial;
+        margin: 0;
+        background: #f2f7f3;
+    }
+
+    /* NAVIGATION */
+
+    nav {
+        background: #1b5e20;
+        padding: 15px;
+        text-align: center;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: bold;
+    }
+
+    nav a:hover {
+        text-decoration: underline;
+    }
+
+    /* HEADER */
+
+    header {
+        background: #2e7d32;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    /* ASSET CONTAINER */
+
+    .container {
+        padding: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    /* ASSET CARD */
+
+    .card {
+        background: white;
+        width: 320px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px #ccc;
+    }
+
+    .status {
+        padding: 8px;
+        border-radius: 6px;
+        background: #e8f5e9;
+        color: #2e7d32;
+        font-weight: bold;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        background: #2e7d32;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1b5e20;
+    }
+
+    select,
+    input {
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+```
+<a href="/">🏠 Home</a>
+
+<a href="/dashboard">📊 Dashboard</a>
+
+<a href="/waste">🤖 AI Classification</a>
+
+<a href="/ewaste">♻️ E-Waste</a>
+```
+
+</nav>
+
+<!-- HEADER -->
+
+<header>
+
+```
+<h1>♻ EcoTrackAI</h1>
+
+<p>E-Waste Lifecycle Auditor</p>
+```
+
+</header>
+
+<!-- ASSET CARDS -->
+
+<div class="container" id="assets">
+
+</div>
+
+<script>
+
+
+// =========================
+// LOAD E-WASTE ASSETS
+// =========================
+
+async function loadAssets() {
+
+    const response = await fetch("/api/ewaste");
+
+    const assets = await response.json();
+
+    const container =
+        document.getElementById("assets");
+
+    container.innerHTML = "";
+
+    assets.forEach(asset => {
+
+        container.innerHTML += `
+
+            <div class="card">
+
+                <h2>${asset.device_name}</h2>
+
+                <p>
+                    <b>Asset ID:</b>
+                    ${asset.asset_code}
+                </p>
+
+                <p>
+                    <b>Category:</b>
+                    ${asset.category}
+                </p>
+
+                <p>
+                    <b>Location:</b>
+                    ${asset.location}
+                </p>
+
+                <p>
+                    <b>Condition:</b>
+                    ${asset.condition_status}
+                </p>
+
+                <p>
+                    <b>Status:</b>
+                </p>
+
+                <p class="status">
+                    ${asset.lifecycle_status}
+                </p>
+
+
+                <select id="status-${asset.asset_code}">
+
+                    <option
+                        value="DECOMMISSIONED"
+                        ${asset.lifecycle_status === "DECOMMISSIONED" ? "selected" : ""}>
+                        DECOMMISSIONED
+                    </option>
+
+                    <option
+                        value="AWAITING COLLECTION"
+                        ${asset.lifecycle_status === "AWAITING COLLECTION" ? "selected" : ""}>
+                        AWAITING COLLECTION
+                    </option>
+
+                    <option
+                        value="COLLECTED"
+                        ${asset.lifecycle_status === "COLLECTED" ? "selected" : ""}>
+                        COLLECTED
+                    </option>
+
+                    <option
+                        value="SENT TO RECYCLER"
+                        ${asset.lifecycle_status === "SENT TO RECYCLER" ? "selected" : ""}>
+                        SENT TO RECYCLER
+                    </option>
+
+                    <option
+                        value="RECYCLED"
+                        ${asset.lifecycle_status === "RECYCLED" ? "selected" : ""}>
+                        RECYCLED
+                    </option>
+
+                </select>
+
+                <br><br>
+
+
+                <input
+                    type="text"
+                    id="recycler-${asset.asset_code}"
+                    placeholder="Recycler name"
+                >
+
+                <br><br>
+
+
+                <button
+                    onclick="updateStatus('${asset.asset_code}')">
+
+                    Update Status
+
+                </button>
+
+
+                <p>
+
+                    <b>Recycler:</b>
+
+                    ${asset.recycler_name || "Not assigned"}
+
+                </p>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+// =========================
+// UPDATE STATUS
+// =========================
+
+async function updateStatus(assetCode) {
+
+    const status =
+        document.getElementById(
+            "status-" + assetCode
+        ).value;
+
+    const recycler =
+        document.getElementById(
+            "recycler-" + assetCode
+        ).value;
+
+
+    const url =
+        `/api/ewaste/${assetCode}?status=${encodeURIComponent(status)}&recycler_name=${encodeURIComponent(recycler)}`;
+
+
+    const response =
+        await fetch(url, {
+            method: "PUT"
+        });
+
+
+    const data =
+        await response.json();
+
+
+    alert(data.message);
+
+
+    loadAssets();
+
+}
+
+
+// =========================
+// START
+// =========================
+
+loadAssets();
+
+</script>
+
+</body>
+
+</html>
