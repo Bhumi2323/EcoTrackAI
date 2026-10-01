@@ -1,1 +1,225 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+```
+<title>EcoTrackAI - Waste Classification</title>
+
+<style>
+
+    body {
+        font-family: Arial;
+        margin: 0;
+        background: #f2f7f3;
+        text-align: center;
+    }
+
+    /* NAVIGATION */
+
+    nav {
+        background: #1b5e20;
+        padding: 15px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        font-weight: bold;
+    }
+
+    nav a:hover {
+        text-decoration: underline;
+    }
+
+    /* HEADER */
+
+    header {
+        background: #2e7d32;
+        color: white;
+        padding: 25px;
+    }
+
+    /* MAIN CARD */
+
+    .container {
+        width: 500px;
+        max-width: 90%;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px #ccc;
+    }
+
+    input {
+        margin: 20px;
+    }
+
+    button {
+        background: #2e7d32;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #1b5e20;
+    }
+
+    #output {
+        margin-top: 25px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+```
+<a href="/">🏠 Home</a>
+
+<a href="/dashboard">📊 Dashboard</a>
+
+<a href="/waste">🤖 AI Classification</a>
+
+<a href="/ewaste">♻️ E-Waste</a>
+```
+
+</nav>
+
+<!-- HEADER -->
+
+<header>
+
+```
+<h1>🌱 EcoTrackAI</h1>
+
+<p>AI-Powered Waste Classification</p>
+```
+
+</header>
+
+<!-- CLASSIFICATION -->
+
+<div class="container">
+
+```
+<h2>♻ Waste Classification</h2>
+
+<p>Select a waste image</p>
+
+<input
+    type="file"
+    id="image"
+    accept="image/*"
+>
+
+<br><br>
+
+<button onclick="classifyWaste()">
+
+    🤖 Classify Waste
+
+</button>
+
+<p id="output"></p>
+```
+
+</div>
+
+<script>
+
+
+async function classifyWaste() {
+
+    const fileInput =
+        document.getElementById("image");
+
+    const output =
+        document.getElementById("output");
+
+
+    if (fileInput.files.length === 0) {
+
+        output.innerHTML =
+            "⚠ Please select an image.";
+
+        return;
+
+    }
+
+
+    output.innerHTML =
+        "⏳ Analyzing image...";
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "image",
+        fileInput.files[0]
+    );
+
+
+    try {
+
+        const response =
+            await fetch("/classify", {
+
+                method: "POST",
+
+                body: formData
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        output.innerHTML =
+
+            "♻ Category: " +
+
+            data.category +
+
+            "<br>Confidence: " +
+
+            data.confidence +
+
+            "%";
+
+
+    }
+
+    catch (error) {
+
+        output.innerHTML =
+            "❌ Classification failed.";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>
 
