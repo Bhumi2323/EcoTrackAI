@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>EcoTrackAI - Smart Dashboard</title>
+
+<style>
+
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f2f7f3;
+}
+
+/* NAVIGATION */
+
+nav {
+    background: #1b5e20;
+    padding: 15px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* HEADER */
+
+header {
+    background: #2e7d32;
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* SECTION */
+
+.section {
+    margin: 25px 30px;
+}
+
+/* GREEN CREDITS */
+
+.credits-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px #ccc;
+}
+
+#credits {
+    font-size: 30px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+/* COLLECTION ALERT */
+
+.alert-section {
+    background: #fff3f3;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 6px solid red;
+}
+
+.alert-section h2 {
+    color: red;
+    margin-top: 0;
+}
+
+.alert-card {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px #ddd;
+}
+
+.alert-card h3 {
+    color: red;
+}
+
+/* SMART BINS */
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.bin {
+    background: white;
+    width: 280px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ccc;
+}
+
+.fill {
+    background: #ddd;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.level {
+    background: #4caf50;
+    height: 100%;
+}
+
+.warning {
+    color: red;
+    font-weight: bold;
+}
+
+/* GENERAL CARDS */
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ccc;
+    margin-bottom: 20px;
+}
+
+/* BUTTON */
+
+button {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1b5e20;
+}
+
+/* AI CLASSIFICATION */
+
+#output {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* E-WASTE */
+
+.asset-card {
+    background: #f8fff9;
+    padding: 18px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border-left: 5px solid #2e7d32;
+}
+
+.asset-card select,
+.asset-card input {
+    padding: 8px;
+    margin: 5px;
+}
+
+/* QR SCANNER */
+
+#reader {
+    width: 320px;
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+#scanResult {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f2f7f3;
+    border-radius: 8px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+<a href="/">🏠 Home</a>
+
+<a href="/dashboard">📊 Dashboard</a>
+
+</nav>
+
+
+<!-- HEADER -->
+
+<header>
+
+<h1>🌱 EcoTrackAI</h1>
+
+<p>AI-Powered Smart Waste Management Dashboard</p>
+
+</header>
+
+
+<!-- ========================= -->
+<!-- GREEN CREDITS -->
+<!-- ========================= -->
+
+<div class="section">
+
+<div class="credits-box">
+
+<h2>🌱 Green Credits</h2>
+
+<p id="credits">Loading...</p>
+
+<p>Reward for responsible waste disposal</p>
+
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- COLLECTION ALERTS -->
+<!-- ========================= -->
+
+<div class="section">
+
+<div class="alert-section">
+
+<h2>🚨 Collection Alerts</h2>
+
+<div id="alerts">
+
+Loading alerts...
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- SMART BINS -->
+<!-- ========================= -->
+
+<div class="section">
+
+<div class="card">
+
+<h2>🗑️ Smart Bin Monitoring</h2>
+
+<p>Live garbage level from ultrasonic sensor</p>
+
+<div class="container" id="bins">
+
+Loading bins...
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- AI WASTE CLASSIFICATION -->
+<!-- ========================= -->
+
+<div class="section">
+
+<div class="card">
+
+<h2>🤖 AI Waste Classification</h2>
+
+<p>Select a waste image and classify it using AI.</p>
+
+<input type="file" id="image" accept="image/*">
+
+<br><br>
+
+<button onclick="classifyWaste()">
+
+Classify Waste
+
+</button>
+
+<p id="output"></p>
+
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- E-WASTE TRACKING -->
+<!-- ========================= -->
+
+<div class="section">
+
+<div class="card">
+
+<h2>♻️ E-Waste Lifecycle Tracking</h2>
+
+<p>Track institutional electronic assets from decommissioning to recycling.</p>
+
+<div id="ewaste">
+
+Loading e-waste assets...
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- QR SCANNER -->
+<!-- ========================= -->
+
+<div class="section">
+
+<div class="card">
+
+<h2>📱 QR Code Scanner</h2>
+
+<p>Scan an e-waste asset QR code.</p>
+
+<div id="reader"></div>
+
+<div id="scanResult">
+
+Waiting for QR scan...
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- QR SCANNER LIBRARY -->
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+
+<script>
+
+
+// =========================
+// LOAD SMART BINS
+// =========================
+
+async function loadBins() {
+
+    try {
+
+        const response = await fetch("/bins");
+
+        const bins = await response.json();
+
+        const container =
+            document.getElementById("bins");
+
+        container.innerHTML = "";
+
+        bins.forEach(bin => {
+
+            let warning = "";
+
+            if (bin.fill_level >= 85) {
+
+                warning = "⚠ COLLECTION REQUIRED";
+
+            }
+
+            else if (bin.fill_level >= 70) {
+
+                warning = "⚠ ALMOST FULL";
+
+            }
+
+            else {
+
+                warning = "✓ NORMAL";
+
+            }
+
+
+            container.innerHTML += `
+
+                <div class="bin">
+
+                    <h2>${bin.location}</h2>
+
+                    <p>
+                        Waste Type:
+                        ${bin.category}
+                    </p>
+
+                    <h3>
+                        Fill Level:
+                        ${bin.fill_level}%
+                    </h3>
+
+                    <div class="fill">
+
+                        <div class="level"
+                             style="width:${bin.fill_level}%">
+
+                        </div>
+
+                    </div>
+
+                    <p class="${
+                        bin.fill_level >= 70
+                        ? 'warning'
+                        : ''
+                    }">
+
+                        ${warning}
+
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log("Bin error:", error);
+
+    }
+
+}
+
+
+// =========================
+// LOAD COLLECTION ALERTS
+// =========================
+
+async function loadAlerts() {
+
+    try {
+
+        const response =
+            await fetch("/bins/alerts");
+
+        const data =
+            await response.json();
+
+        const alertContainer =
+            document.getElementById("alerts");
+
+
+        if (data.alert_count === 0) {
+
+            alertContainer.innerHTML =
+                "<p>✅ No collection alerts</p>";
+
+            return;
+
+        }
+
+
+        alertContainer.innerHTML = "";
+
+
+        data.alerts.forEach(bin => {
+
+            alertContainer.innerHTML += `
+
+                <div class="alert-card">
+
+                    <h3>
+                        🚨 COLLECTION REQUIRED
+                    </h3>
+
+                    <p>
+                        <b>Bin:</b>
+                        ${bin.bin_id}
+                    </p>
+
+                    <p>
+                        <b>Location:</b>
+                        ${bin.location}
+                    </p>
+
+                    <p>
+                        <b>Category:</b>
+                        ${bin.category}
+                    </p>
+
+                    <p>
+                        <b>Garbage Level:</b>
+                        ${bin.fill_level}%
+                    </p>
+
+                    <p>
+                        <b>Status:</b>
+                        ${bin.status}
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log("Alert error:", error);
+
+    }
+
+}
+
+
+// =========================
+// AI CLASSIFICATION
+// =========================
+
+async function classifyWaste() {
+
+    const fileInput =
+        document.getElementById("image");
+
+    const output =
+        document.getElementById("output");
+
+
+    if (fileInput.files.length === 0) {
+
+        output.innerHTML =
+            "⚠ Please select an image.";
+
+        return;
+
+    }
+
+
+    output.innerHTML =
+        "⏳ Analyzing image...";
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "image",
+        fileInput.files[0]
+    );
+
+
+    try {
+
+        const response =
+            await fetch("/classify", {
+
+                method: "POST",
+
+                body: formData
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        output.innerHTML =
+
+            "♻ Category: " +
+            data.category +
+
+            "<br>Confidence: " +
+            data.confidence +
+            "%";
+
+    }
+
+    catch (error) {
+
+        output.innerHTML =
+            "❌ Classification failed.";
+
+    }
+
+}
+
+
+// =========================
+// LOAD GREEN CREDITS
+// =========================
+
+async function loadCredits() {
+
+    try {
+
+        const response =
+            await fetch("/credits/Bhumika");
+
+        const data =
+            await response.json();
+
+
+        document.getElementById("credits")
+            .innerText =
+            data.total_points +
+            " Points";
+
+    }
+
+    catch (error) {
+
+        console.log("Credits error:", error);
+
+    }
+
+}
+
+
+// =========================
+// LOAD E-WASTE
+// =========================
+
+async function loadEWaste() {
+
+    try {
+
+        const response =
+            await fetch("/api/ewaste");
+
+        const assets =
+            await response.json();
+
+
+        const container =
+            document.getElementById("ewaste");
+
+
+        container.innerHTML = "";
+
+
+        assets.forEach(asset => {
+
+            container.innerHTML += `
+
+                <div class="asset-card">
+
+                    <h3>
+                        ♻️ ${asset.asset_code}
+                    </h3>
+
+                    <p>
+                        <b>Device:</b>
+                        ${asset.device_name}
+                    </p>
+
+                    <p>
+                        <b>Category:</b>
+                        ${asset.category}
+                    </p>
+
+                    <p>
+                        <b>Location:</b>
+                        ${asset.location}
+                    </p>
+
+                    <p>
+                        <b>Condition:</b>
+                        ${asset.condition_status}
+                    </p>
+
+                    <p>
+                        <b>Lifecycle:</b>
+                        ${asset.lifecycle_status}
+                    </p>
+
+                    <p>
+                        <b>Recycler:</b>
+                        ${asset.recycler_name || "Not assigned"}
+                    </p>
+
+
+                    <select
+                        id="status-${asset.asset_code}">
+
+                        <option>
+                            DECOMMISSIONED
+                        </option>
+
+                        <option>
+                            AWAITING COLLECTION
+                        </option>
+
+                        <option>
+                            COLLECTED
+                        </option>
+
+                        <option>
+                            SENT TO RECYCLER
+                        </option>
+
+                        <option>
+                            RECYCLED
+                        </option>
+
+                    </select>
+
+
+                    <input
+                        type="text"
+                        id="recycler-${asset.asset_code}"
+                        placeholder="Recycler name">
+
+
+                    <button
+                        onclick="updateEWaste(
+                            '${asset.asset_code}'
+                        )">
+
+                        Update Status
+
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log("E-Waste error:", error);
+
+    }
+
+}
+
+
+// =========================
+// UPDATE E-WASTE
+// =========================
+
+async function updateEWaste(assetCode) {
+
+    const status =
+        document.getElementById(
+            "status-" + assetCode
+        ).value;
+
+
+    const recycler =
+        document.getElementById(
+            "recycler-" + assetCode
+        ).value;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/ewaste/" +
+                assetCode +
+                "?status=" +
+                encodeURIComponent(status) +
+                "&recycler_name=" +
+                encodeURIComponent(recycler),
+                {
+                    method: "PUT"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        alert(
+            "E-Waste status updated successfully!"
+        );
+
+
+        loadEWaste();
+
+    }
+
+    catch (error) {
+
+        alert(
+            "Failed to update e-waste."
+        );
+
+    }
+
+}
+
+
+// =========================
+// QR SCANNER
+// =========================
+
+function onScanSuccess(decodedText) {
+
+    const result =
+        document.getElementById(
+            "scanResult"
+        );
+
+
+    result.innerHTML =
+        "⏳ Loading asset information...";
+
+
+    try {
+
+        const url =
+            new URL(decodedText);
+
+
+        const parts =
+            url.pathname.split("/");
+
+
+        const assetCode =
+            parts[parts.length - 1];
+
+
+        loadScannedAsset(assetCode);
+
+    }
+
+    catch (error) {
+
+        result.innerHTML =
+            "❌ Invalid QR Code";
+
+    }
+
+}
+
+
+// =========================
+// LOAD SCANNED ASSET
+// =========================
+
+async function loadScannedAsset(assetCode) {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/ewaste/" +
+                assetCode
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error();
+
+        }
+
+
+        const asset =
+            await response.json();
+
+
+        document.getElementById(
+            "scanResult"
+        ).innerHTML = `
+
+            <h3>✅ Asset Found</h3>
+
+            <p>
+                <b>Asset Code:</b>
+                ${asset.asset_code}
+            </p>
+
+            <p>
+                <b>Device:</b>
+                ${asset.device_name}
+            </p>
+
+            <p>
+                <b>Category:</b>
+                ${asset.category}
+            </p>
+
+            <p>
+                <b>Location:</b>
+                ${asset.location}
+            </p>
+
+            <p>
+                <b>Lifecycle:</b>
+                ${asset.lifecycle_status}
+            </p>
+
+            <p>
+                <b>Recycler:</b>
+                ${asset.recycler_name || "Not assigned"}
+            </p>
+
+            <button
+                onclick="verifyDisposal()">
+
+                🌱 Verify Disposal +50 Credits
+
+            </button>
+
+        `;
+
+
+        window.scannedAsset =
+            asset.asset_code;
+
+    }
+
+    catch (error) {
+
+        document.getElementById(
+            "scanResult"
+        ).innerHTML =
+            "❌ Asset not found.";
+
+    }
+
+}
+
+
+// =========================
+// VERIFY DISPOSAL
+// =========================
+
+async function verifyDisposal() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/credits/add" +
+                "?user_name=Bhumika" +
+                "&action=E-Waste%20Recycling" +
+                "&points=50",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error();
+
+        }
+
+
+        alert(
+            "🌱 50 Green Credits added!"
+        );
+
+
+        loadCredits();
+
+    }
+
+    catch (error) {
+
+        alert(
+            "❌ Failed to add credits."
+        );
+
+    }
+
+}
+
+
+// =========================
+// START QR SCANNER
+// =========================
+
+const scanner =
+    new Html5QrcodeScanner(
+        "reader",
+        {
+            fps: 10,
+            qrbox: 250
+        }
+    );
+
+
+scanner.render(
+    onScanSuccess
+);
+
+
+// =========================
+// INITIAL LOAD
+// =========================
+
+loadBins();
+
+loadAlerts();
+
+loadCredits();
+
+loadEWaste();
+
+
+// =========================
+// AUTO REFRESH
+// =========================
+
+setInterval(loadBins, 2000);
+
+setInterval(loadAlerts, 2000);
+
+setInterval(loadCredits, 5000);
+
+setInterval(loadEWaste, 5000);
+
+
+</script>
+
+</body>
+
+</html>
