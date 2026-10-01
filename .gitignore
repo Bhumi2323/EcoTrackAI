@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.env
+waste_model.pth
+uploads/*
+qr_codes/*.png
+*.log
+.DS_Store
